@@ -49,7 +49,7 @@
       background-color: #333;
     }
 
-    .start-overlay {
+    .start-overlay, .game-over-overlay {
       position: absolute;
       top: 0;
       left: 0;
@@ -85,6 +85,13 @@
       <button onclick="selectLevel('medium')">Medium</button>
       <button onclick="selectLevel('hard')">Hard</button>
     </div>
+  </div>
+
+  <div class="game-over-overlay" id="gameOverOverlay" style="display:none">
+    <h2>Game Over!</h2>
+    <p id="finalScore"></p>
+    <button onclick="restartGame()">Restart</button>
+    <a href="games.html"><button>Back to Games</button></a>
   </div>
 
   <script>
@@ -180,9 +187,13 @@
       snake = [{ x: 200, y: 200 }];
       direction = null;
       score = 0;
+      started = false;
       document.getElementById("score").innerText = "Score: 0";
+      document.getElementById("gameOverOverlay").style.display = "none";
       spawnFood();
-      startGame();
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawSnake();
+      drawFood();
     }
 
     window.addEventListener("keydown", e => {
