@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>පංච දැමීම</title>
+  <style>
+    body {
+      background-color: #fdd053;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      margin-top: 20px;
+      color: #d2691e;
+    }
+
+    .hero-image {
+      width: 100%;
+      max-width: 1000px;
+      height: 200px;
+      background: url('https://images.unsplash.com/photo-1605058204210-f16753b05e41?fit=crop&w=1000&h=200') center/cover no-repeat;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      margin-bottom: 20px;
+    }
+
+    .main-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      width: 100%;
+      max-width: 1000px;
+      padding: 20px;
+    }
+
+    .board-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .game-board {
+      display: grid;
+      grid-template-columns: repeat(13, 40px);
+      grid-template-rows: repeat(19, 40px);
+      gap: 1px;
+      background-color: #333;
+      position: relative;
+    }
+
+    .right-panel {
+      flex: 0 0 240px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }    
+
+    .cell {
+      width: 40px;
+      height: 40px;
+      background-color: #ffefc1;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      position: relative;
+      font-size: 12px;
+      /* color: #555;*/
+      color:transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cell[data-index="44"],
+    .cell[data-index="46"] {
+      background-color: #4CAF50 !important;
+      color: #fff;
+    }
+
+    .cell[data-index="234"],
+    .cell[data-index="240"],
+    .cell[data-index="246"],
+    .cell[data-index="162"],
+    .cell[data-index="156"],
+    .cell[data-index="168"],
+    .cell[data-index="78"],
+    .cell[data-index="84"],
+    .cell[data-index="90"],
+    .cell[data-index="0"],
+    .cell[data-index="6"],
+    .cell[data-index="12"],
+    .cell[data-index="66"],
+    .cell[data-index="76"] {
+      background-color: red !important;
+      color: white;
+    }
+
+    .path {
+      background-color: #fdd;
+    }
+
+    .line {
+      background-color: #f90 !important;
+    }
+
+    .hidden {
+      background-color: #333 !important;
+      color: transparent;
+      border: none;
+    }
+
+    .token {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      position: absolute;
+      z-index: 10;
+    }
+
+    .blue-token {
+      background-color: blue;
+    }
+
+    .pink-token {
+      background-color: pink;
+    }
+
+    .dice-button,
+    .restart-button {
+      padding: 15px 30px;
+      font-size: 18px;
+      background-color: #ff9800;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .dice-result {
+      font-size: 24px;
+      color: #333;
+    }
+
+    .win-message {
+      font-size: 20px;
+      color: green;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .back-button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #666;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+
+    .instructions {
+      font-size: 14px;
+      background: #fff3cd;
+      border-left: 5px solid #ffeb3b;
+      padding: 10px;
+      margin-top: 20px;
+      border-radius: 5px;
+    }
+
+    .fireworks {
+      animation: explode 1s infinite;
+    }
+
+    @keyframes explode {
+      0% { box-shadow: 0 0 5px white; }
+      50% { box-shadow: 0 0 20px red, 0 0 30px orange, 0 0 40px yellow; }
+      100% { box-shadow: 0 0 5px white; }
+    }
+  </style>
+</head>
+<body>
+  <h1>පංච දැමීම - Pancha Demima</h1>
+  <div class="hero-image"></div>
+
+  <div class="main-container">
+    <div class="board-container">
+      <div class="game-board" id="gameBoard"></div>
+    </div>
+    <div class="right-panel">
+      <button class="dice-button" onclick="rollDice()">Roll Dice 🎲</button>
+      <button class="restart-button" onclick="restartGame()">Restart 🔄</button>
+      <div class="dice-result" id="diceResult">Roll to start!</div>
+      <div class="win-message" id="winMessage"></div>
+      <a class="back-button" href="games.html">⬅ Back</a>
+      <div class="instructions">
+        <strong>How to Play:</strong>
+        <ul>
+          <li>🎯 Roll the dice to move your token along the path.</li>
+          <li>🔁 Alternate turns between the player and AI.</li>
+          <li>🎉 Reach the final square to win the game!</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const board = document.getElementById('gameBoard');
+    const diceResultEl = document.getElementById('diceResult');
+    const winMessageEl = document.getElementById('winMessage');
+    const rows = 19;
+    const cols = 13;
+
+    const leftPath = [234,235,236,237,238,239,240,227,214,201,188,175,162,161,160,159,158,157,156,143,130,117,104,91,78,65,,52,39,26,13,0,1,2,3,4,5,6,7,8,9,10,11,12,25,38,51,64,77,90,103,116,129,142,155,168,167,166,165,164,163,162,149,136,123,110,97,84,83,82,81,,80,79,66,54,42,30,44];
+    const rightPath = [246,245,244,243,242,241,240,227,214,201,188,175,162,163,164,165,166,167,168,155,142,129,116,103,90,77,64,51,38,25,12,11,10,9,8,7,6,5,4,3,2,1,0,13,26,39,52,65,78,91,104,117,130,143,156,157,158,159,160,161,162,149,136,123,110,97,84,85,86,87,88,89,76,62,48,34,46];
+
+    let leftPos = 0;
+    let rightPos = 0;
+    let currentPlayer = 'left';
+
+    const hiddenCells = new Set([221, 208, 195, 182, 169, 233, 220, 207, 194, 181, 71, 58, 45, 32, 19]);
+    const normalYellowCells = new Set([54, 42, 30, 62, 48, 34]);
+
+    const tokens = {
+      left: createToken('blue-token'),
+      right: createToken('pink-token')
+    };
+
+    function createToken(className) {
+      const token = document.createElement('div');
+      token.classList.add('token', className);
+      return token;
+    }
+
+    function renderBoard() {
+      board.innerHTML = '';
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const index = r * cols + c;
+          const cell = document.createElement('div');
+          cell.classList.add('cell');
+          cell.setAttribute('data-index', index);
+
+          if (hiddenCells.has(index)) {
+            cell.classList.add('hidden');
+          } else {
+            cell.textContent = index;
+          }
+
+          if ([0, 6, 12, 18].includes(r)) cell.classList.add('line');
+          if ([0, 6, 12].includes(c)) cell.classList.add('line');
+          if (c === 6 && r >= 0 && r <= 12) cell.classList.add('line');
+          if (c === 0 && r >= 6 && r <= 18) cell.classList.add('line');
+          if (c === 12 && r >= 6 && r <= 18) cell.classList.add('line');
+
+          if (normalYellowCells.has(index)) cell.style.backgroundColor = '#f90';
+
+          board.appendChild(cell);
+        }
+      }
+      board.querySelector(`[data-index='${leftPath[0]}']`).appendChild(tokens.left);
+      board.querySelector(`[data-index='${rightPath[0]}']`).appendChild(tokens.right);
+    }
+
+    function rollDice() {
+      const dice = Math.floor(Math.random() * 6) + 1;
+      diceResultEl.textContent = `You rolled: ${dice}`;
+
+      if (currentPlayer === 'left') {
+        if (leftPos < leftPath.length - 1) {
+          leftPos = Math.min(leftPos + dice, leftPath.length - 1);
+          moveToken(tokens.left, leftPath[leftPos]);
+          if (leftPath[leftPos] === 44) {
+            showWin('Left', 'blue-token');
+            return;
+          }
+          currentPlayer = 'right';
+        }
+      } else {
+        setTimeout(() => {
+          if (rightPos < rightPath.length - 1) {
+            const aiRoll = Math.floor(Math.random() * 6) + 1;
+            diceResultEl.textContent = `AI rolled: ${aiRoll}`;
+            rightPos = Math.min(rightPos + aiRoll, rightPath.length - 1);
+            moveToken(tokens.right, rightPath[rightPos]);
+            if (rightPath[rightPos] === 46) {
+              showWin('Right', 'pink-token');
+              return;
+            }
+            currentPlayer = 'left';
+          }
+        }, 1000);
+      }
+    }
+
+    function moveToken(token, index) {
+      const cell = board.querySelector(`[data-index='${index}']`);
+      if (cell) cell.appendChild(token);
+    }
+
+    function showWin(team, colorClass) {
+      winMessageEl.textContent = `${team} team wins! 🎉`;
+      const token = document.querySelector(`.${colorClass}`);
+      if (token) token.classList.add('fireworks');
+    }
+
+    function restartGame() {
+      leftPos = 0;
+      rightPos = 0;
+      currentPlayer = 'left';
+      winMessageEl.textContent = '';
+      diceResultEl.textContent = 'Roll to start!';
+      tokens.left.classList.remove('fireworks');
+      tokens.right.classList.remove('fireworks');
+      renderBoard();
+    }
+
+    renderBoard();
+  </script>
+</body>
+</html>

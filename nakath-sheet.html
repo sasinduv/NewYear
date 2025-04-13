@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+  <meta charset="UTF-8">
+  <title>අවුරුදු නැකත් සීට්ටුව</title>
+  <style>
+    body {
+      font-family: 'Noto Serif Sinhala', serif;
+      background: linear-gradient(to bottom, #fff9c4, #ffe082);
+      color: #6d4c41;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #d84315;
+      font-size: 2.5em;
+    }
+
+    table {
+      margin: 0 auto;
+      border-collapse: collapse;
+      width: 80%;
+      background-color: #fff8e1;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      padding: 12px 20px;
+      border: 1px solid #ffcc80;
+    }
+
+    th {
+      background-color: #ffb300;
+      color: white;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 10px 25px;
+      background-color: #f57c00;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 18px;
+    }
+
+    .back-btn:hover {
+      background-color: #ef6c00;
+    }
+    .firework {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: red;
+      border-radius: 50%;
+      animation: explode 1s infinite;
+    }
+    
+    @keyframes explode {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(4); opacity: 0.5; }
+      100% { transform: scale(1); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <h1>අවුරුදු නැකත් සීට්ටුව</h1>
+  <table>
+    <tr>
+      <th>නැකත් කාර්යය</th>
+      <th>නැකත් වෙලාව</th>
+    </tr>
+    <tr>
+      <td>අලුත් අවුරුදු උදාවීම</td>
+      <td>අප්‍රේල් 14 වන දින, පූර්වභාග 03.21</td>
+    </tr>
+    <tr>
+      <td>පුණ්‍ය කාලය උදාවීම</td>
+      <td>අප්‍රේල් 13 වන දින, අපරභාග 08.57 සිට අප්‍රේල් 14 වන දින, පූර්වභාග 09.45</td>
+    </tr>
+    <tr>
+      <td>ආහාර පිසීම</td>
+      <td>අප්‍රේල් 14, පූර්වභාග 04.04</td>
+    </tr>
+    <tr>
+      <td>වැඩ ඇල්ලීම, ගනුදෙනු කිරීම, ආහාර අනුභවය</td>
+      <td>අප්‍රේල් 14, පූර්වභාග 06.44</td>
+    </tr>
+    <tr>
+      <td>හිස තෙල් ගෑම</td>
+      <td>අප්‍රේල් 16, පූර්වභාග 09.04</td>
+    </tr>
+    <tr>
+        <td>රැකියා සදහා පිටත් වීම</td>
+        <td>අප්‍රේල් 17, පූර්වභාග 09.03</td>
+      </tr>
+  </table>
+
+  <a class="back-btn" href="index.html">⬅ ආපසු</a>
+
+  <script>
+    function createFirework() {
+      const firework = document.createElement('div');
+      firework.classList.add('firework');
+      firework.style.top = Math.random() * window.innerHeight + 'px';
+      firework.style.left = Math.random() * window.innerWidth + 'px';
+      document.body.appendChild(firework);
+
+      setTimeout(() => firework.remove(), 1000);
+    }
+
+    setInterval(createFirework, 300);
+  </script>
+</body>
+</html>

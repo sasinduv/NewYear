@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en,si">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ayubowan Game Hub</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #eb871b; /* light yellow like sun */
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(to bottom right, #fff176, #ffe082);
+      font-family: 'Arial Rounded MT Bold', sans-serif;
+      text-align: center;
+      color: #d84315;
+      overflow: hidden;
+    }
+
+    h1 {
+      color: #14a5b8;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .kids-container {
+      display: flex;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .sun{
+        border-image-width: 50%;
+        display: flex;
+        gap: 25px;
+        align-items: left; 
+    }
+
+    .kid {
+      width: 150px;
+      animation: wave 2s infinite alternate;
+    }
+    .play-button {
+  margin-top: 40px;
+  padding: 15px 30px;
+  background-color: #ff9800;
+  color: white;
+  text-decoration: none;
+  font-size: 1.2rem;
+  border-radius: 12px;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.play-button:hover {
+  background-color: #e68900;
+}
+
+.footer-info {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      color: black;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+.firework {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: red;
+      border-radius: 50%;
+      animation: explode 1s infinite;
+    }
+
+    @keyframes explode {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(4); opacity: 0.5; }
+      100% { transform: scale(1); opacity: 0; }
+    }
+
+
+    @keyframes wave {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(3deg); }
+    }
+  </style>
+</head>
+<body>
+  <h1>ආයුබෝවන්!</h1>
+  <h1>සුබ අලුත් අවුරුද්දක් වේවා!</h1>
+  <div class="kids-container">
+    <img src="boy-kid.png" alt="Sri Lankan Boy Ayubowan" class="kid"/>
+    <img src="girl-kid.png" alt="Sri Lankan Girl Ayubowan" class="kid"/>
+  </div>
+  <a href="games.html" class="play-button">සෙල්ලම් කරන්න🎮</a>
+  <button class="play-button" onclick="location.href='nakath-sheet.html'">අවුරුඩු නැකත් සීට්ටුව</button>
+
+  <div class="footer-info">
+    Sasindu Gihan<br>
+    UG of University of Ruhuna CS Department<br>
+  </div>
+
+  <script>
+    function createFirework() {
+      const firework = document.createElement('div');
+      firework.classList.add('firework');
+      firework.style.top = Math.random() * window.innerHeight + 'px';
+      firework.style.left = Math.random() * window.innerWidth + 'px';
+      document.body.appendChild(firework);
+
+      setTimeout(() => firework.remove(), 1000);
+    }
+
+    setInterval(createFirework, 300);
+  </script>
+
+</body>
+</html>
